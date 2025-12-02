@@ -25,7 +25,7 @@ const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.end(
       JSON.stringify({
-        message: "歡迎使用 API 服務",
+        message: "歡迎使用旨褘的 API 服務",
         endpoints: {
           health: "/api/health",
           products: "/api/products?min=5000&max=20000",
