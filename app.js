@@ -8,8 +8,8 @@ const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Content-Type", "application/json; charset=utf-8");
 
-  // Health API
-  if (req.url === "/api/health" && req.method === "GET") {
+  // Health API（/api/health）
+  if ((req.url === "/api/health" || req.url === "/health") && req.method === "GET") {
     res.statusCode = 200;
     res.end(
       JSON.stringify({
@@ -37,29 +37,21 @@ const server = http.createServer((req, res) => {
 
   // 商品查詢 API - 支援價格區間篩選
   if (req.url.startsWith("/api/products") && req.method === "GET") {
-    // 準備 5 個 3C 產品
     const products = [
       { id: 1, name: "手機", price: 12900 },
       { id: 2, name: "筆電", price: 32900 },
       { id: 3, name: "平板", price: 15900 },
       { id: 4, name: "耳機", price: 2990 },
       { id: 5, name: "螢幕", price: 6990 },
-       { id: 6, name: "Dell大螢幕", price: 12990 },
+      { id: 6, name: "Dell大螢幕", price: 12990 },
     ];
 
-    // 解析 URL 和 query 參數
     const parsedUrl = url.parse(req.url, true);
-
-    // 取得 query 參數：?min=5000&max=20000
     const min = Number(parsedUrl.query.min) || 0;
     const max = Number(parsedUrl.query.max) || Infinity;
 
-    // 篩選出在區間內的產品
-    const matched = products.filter(function (p) {
-      return p.price >= min && p.price <= max;
-    });
+    const matched = products.filter((p) => p.price >= min && p.price <= max);
 
-    // 準備要回傳的 JSON
     const result = {
       min,
       max,
@@ -83,6 +75,6 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🚀 伺服器運行在 http://localhost:${PORT}`);
-  console.log(`📍 環境: ${process.env.NODE_ENV || "development"}`);
+  console.log(`🚀 Server is listening on port ${PORT}`);
+  console.log(`📍 NODE_ENV: ${process.env.NODE_ENV || "development"}`);
 });
